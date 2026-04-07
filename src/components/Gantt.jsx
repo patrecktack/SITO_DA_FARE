@@ -70,7 +70,6 @@ export default function Gantt({ currentDate = new Date(), viewMode = 'month', ac
 
   // 3. MOUSE GRAB (SPOSTAMENTO SFONDO FLUIDO)
   const handleMouseDown = (e) => {
-    // IMPORTANTISSIMO: Se l'utente clicca su un task, lascia fare a interact.js
     if (e.target.closest('.draggable-task')) return;
 
     dragRef.current.isDown = true;
@@ -90,7 +89,6 @@ export default function Gantt({ currentDate = new Date(), viewMode = 'month', ac
     const x = e.pageX - containerRef.current.offsetLeft;
     const walk = (x - dragRef.current.startX) * 1.5;
 
-    // Aggiorno direttamente lo scroll DOM
     containerRef.current.scrollLeft = dragRef.current.scrollLeft - walk;
   };
 
@@ -157,20 +155,25 @@ export default function Gantt({ currentDate = new Date(), viewMode = 'month', ac
     return () => interactable.unset();
   }, [activities, viewMode, onUpdateActivity]);
 
+  // --- MODIFICA: CALCOLO ALTEZZA DINAMICA ---
+  // Calcoliamo l'altezza necessaria per contenere esattamente le attività (+ un piccolo margine)
+  const contentHeight = Math.max(activities.length * 50 + 120, 400);
+
   return (
     <div className="flex-1 overflow-hidden flex flex-col bg-white dark:bg-black relative select-none w-full h-full">
 
       <div
         ref={containerRef}
-        className="flex-1 overflow-x-auto overflow-y-hidden relative cursor-grab active:cursor-grabbing"
+        // overflow-y-auto permette lo scroll solo se l'altezza delle attività supera lo schermo
+        className="flex-1 overflow-x-auto overflow-y-auto relative cursor-grab active:cursor-grabbing"
         style={{ scrollBehavior: 'smooth', overscrollBehaviorX: 'none' }}
-        // EVENTI GRAB SFONDO
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        <div className="relative h-full flex" style={{ width: `${totalWidth}px`, minWidth: '100%' }}>
+        {/* L'altezza di questo div ora è dinamica basata sulle attività */}
+        <div className="relative flex" style={{ width: `${totalWidth}px`, height: `${contentHeight}px`, minWidth: '100%' }}>
 
           {/* GRIGLIA E COLONNE */}
           {days.map((day, i) => (
@@ -232,7 +235,6 @@ export default function Gantt({ currentDate = new Date(), viewMode = 'month', ac
                   <div
                     key={activity.id}
                     data-id={activity.id}
-                    // pointer-events-auto ferma il grab dello sfondo quando clicchi qui!
                     className={`draggable-task absolute h-10 mb-2 rounded-xl flex items-center px-3 shadow-sm border border-white/10 pointer-events-auto cursor-grab active:cursor-grabbing hover:brightness-110 touch-none ${activity.color}`}
                     onClick={(e) => { e.stopPropagation(); onEditActivity && onEditActivity(activity); }}
                     style={{

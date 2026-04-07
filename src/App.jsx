@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, ChevronLeft, ChevronRight, X, LogOut, Moon, Sun, Calendar, Trash2, Settings, User, Lock, Mail, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
+import {
+  Plus, ChevronLeft, ChevronRight, X, LogOut, Moon, Sun,
+  Calendar, Trash2, Settings, User, Lock, Mail, AlertTriangle,
+  AlertCircle, CheckCircle
+} from 'lucide-react';
 import {
   format, addDays, addWeeks, addMonths, addYears,
   differenceInCalendarDays, startOfDay,
@@ -257,12 +261,11 @@ export default function App() {
     }
   };
 
-  // ECCO IL TUO RETURN PER IL LOGIN - INTATTO AL 100%
   if (!session) return <><button onClick={() => setIsDarkMode(!isDarkMode)} className="fixed top-6 right-6 p-3 rounded-full bg-gray-100 dark:bg-zinc-800 hover:scale-110 transition-transform z-50 text-black dark:text-white">{isDarkMode ? <Sun size={20} /> : <Moon size={20} />}</button><Login /></>;
 
   return (
     <div className="h-screen flex flex-col overflow-hidden select-none bg-gray-50 text-slate-900 dark:bg-black dark:text-white transition-colors duration-500 font-sans">
-      <header className="px-6 py-4 flex flex-col sm:flex-row justify-between items-center animate-enter z-50 gap-4">
+      <header className="px-6 py-4 flex flex-col sm:flex-row justify-between items-center animate-enter z-50 gap-4 bg-white/95 dark:bg-black/95 backdrop-blur-sm border-b border-gray-100 dark:border-zinc-900 shrink-0">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto relative" ref={dropdownRef}>
           <div className="flex items-center gap-1 rounded-full p-1 pr-5 shadow-sm border transition-colors bg-white border-gray-100 dark:bg-zinc-900 dark:border-zinc-800 relative z-20">
             <button onClick={() => handleNavigate('prev')} className="p-2 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800"><ChevronLeft size={18} /></button>
@@ -289,7 +292,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* WRAPPER FIXATO PER EVITARE SCHERMO NERO - GANTT */}
+      {/* GANTT: WRAPPER FISSO PER NON FAR COLLASSARE L'ALTEZZA */}
       <div className="flex-1 w-full overflow-hidden relative bg-white dark:bg-black">
         <Gantt
           currentDate={currentDate}
@@ -303,11 +306,11 @@ export default function App() {
 
       <button onClick={() => openNewModal(new Date())} className="fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-90 transition-all z-50 bg-black text-white dark:bg-white dark:text-black dark:shadow-[0_0_40px_rgba(255,255,255,0.2)]"><Plus size={32} /></button>
 
-      {/* MODAL VARI */}
+      {/* MODALI INTEGRALI */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center p-4">
           <div className="absolute inset-0 backdrop-blur-md bg-black/20 dark:bg-black/60" onClick={() => setIsModalOpen(false)} />
-          <div className="w-full max-w-sm rounded-[2rem] p-6 space-y-6 shadow-2xl animate-enter relative z-10 card-theme overflow-hidden">
+          <div className="w-full max-w-sm rounded-[2rem] p-6 space-y-6 shadow-2xl animate-enter relative z-10 bg-white dark:bg-[#1C1C1E] overflow-hidden">
             {showDeleteConfirm ? (
               <div className="space-y-6 text-center animate-enter">
                 <div className="w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto text-red-500 mb-2"><Trash2 size={40} /></div>
@@ -321,7 +324,7 @@ export default function App() {
               <>
                 <div className="flex justify-between items-center"><h3 className="text-xl font-bold tracking-tight">{formActivity.id ? 'Modifica Attività' : 'Nuova Attività'}</h3><button onClick={() => setIsModalOpen(false)} className="p-2 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"><X size={20} /></button></div>
                 <div className="space-y-4">
-                  <input autoFocus type="text" placeholder="Titolo attività..." className="modal-input" value={formActivity.title} onChange={e => setFormActivity({ ...formActivity, title: e.target.value })} />
+                  <input autoFocus type="text" placeholder="Titolo attività..." className="w-full bg-gray-100 dark:bg-zinc-800 rounded-2xl p-4 text-sm font-bold outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all" value={formActivity.title} onChange={e => setFormActivity({ ...formActivity, title: e.target.value })} />
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1 relative"><span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-zinc-500 pl-2">Inizio</span><button onClick={() => { setActiveDatePicker(activeDatePicker === 'start' ? null : 'start'); setPickerDate(formActivity.start); }} className={`w-full bg-gray-100 dark:bg-zinc-800 rounded-2xl p-4 text-left text-sm font-bold flex items-center justify-between transition-all ${activeDatePicker === 'start' ? 'ring-2 ring-black dark:ring-white' : ''}`}>{format(formActivity.start, 'd MMM yyyy', { locale: it })}<Calendar size={16} className="text-gray-400" /></button></div>
                     <div className="space-y-1 relative"><span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-zinc-500 pl-2">Fine</span><button onClick={() => { setActiveDatePicker(activeDatePicker === 'end' ? null : 'end'); setPickerDate(formActivity.end); }} className={`w-full bg-gray-100 dark:bg-zinc-800 rounded-2xl p-4 text-left text-sm font-bold flex items-center justify-between transition-all ${activeDatePicker === 'end' ? 'ring-2 ring-black dark:ring-white' : ''}`}>{format(formActivity.end, 'd MMM yyyy', { locale: it })}<Calendar size={16} className="text-gray-400" /></button></div>
@@ -335,11 +338,10 @@ export default function App() {
         </div>
       )}
 
-      {/* MODAL IMPOSTAZIONI ACCOUNT */}
       {isSettingsOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 backdrop-blur-md bg-black/40 dark:bg-black/80" onClick={() => setIsSettingsOpen(false)} />
-          <div className="w-full max-w-md rounded-[2rem] p-8 space-y-8 shadow-2xl animate-enter relative z-10 card-theme overflow-hidden">
+          <div className="w-full max-w-md rounded-[2rem] p-8 space-y-8 shadow-2xl animate-enter relative z-10 bg-white dark:bg-[#1C1C1E] overflow-hidden">
             <div className="flex justify-between items-center">
               <h3 className="text-2xl font-bold tracking-tight flex items-center gap-2"><User size={24} /> Impostazioni Account</h3>
               <button onClick={() => setIsSettingsOpen(false)} className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"><X size={20} /></button>
@@ -357,7 +359,7 @@ export default function App() {
               <div className="space-y-2">
                 <label className="text-sm font-bold ml-1">Cambia Email</label>
                 <div className="flex gap-2">
-                  <input type="email" placeholder="Nuova email..." className="flex-1 modal-input text-sm py-3" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
+                  <input type="email" placeholder="Nuova email..." className="flex-1 bg-gray-100 dark:bg-zinc-800 rounded-xl p-3 text-sm font-bold outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
                   <button onClick={handleUpdateEmail} disabled={loadingSettings} className="px-4 bg-black text-white dark:bg-white dark:text-black rounded-xl font-bold text-sm hover:opacity-80 disabled:opacity-50">Aggiorna</button>
                 </div>
               </div>
@@ -367,7 +369,7 @@ export default function App() {
               <div className="space-y-2">
                 <label className="text-sm font-bold ml-1 flex items-center gap-2"><Lock size={14} /> Cambia Password</label>
                 <div className="flex gap-2">
-                  <input type="password" placeholder="Nuova password..." className="flex-1 modal-input text-sm py-3" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+                  <input type="password" placeholder="Nuova password..." className="flex-1 bg-gray-100 dark:bg-zinc-800 rounded-xl p-3 text-sm font-bold outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
                   <button onClick={handleUpdatePassword} disabled={loadingSettings} className="px-4 bg-black text-white dark:bg-white dark:text-black rounded-xl font-bold text-sm hover:opacity-80 disabled:opacity-50">Salva</button>
                 </div>
               </div>
