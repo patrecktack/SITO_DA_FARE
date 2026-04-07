@@ -14,8 +14,8 @@ import { it } from 'date-fns/locale';
 import { supabase } from './supabaseClient';
 
 // Importazioni componenti
-import Login from './components/Login';
-import Gantt from './components/Gantt';
+import Login from './components/Login.jsx';
+import Gantt from './components/Gantt.jsx';
 
 const COLORS = [
   { class: 'bg-black dark:bg-white text-white dark:text-black' },
